@@ -12,7 +12,7 @@ type Doc = { id: string };
 export const useCollection = <T extends Doc = Doc>(coll: Collection) => {
   const { uid } = useUserContext();
   const [data, setData] = useState<T[]>();
-  const collRef = useMemo(() => getCollRef(coll, uid), []);
+  const collRef = useMemo(() => getCollRef(coll, uid), [coll, uid]);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collRef, (snapshot) => {
@@ -30,7 +30,7 @@ const getData = (doc: QueryDocumentSnapshot) => ({
   ...doc.data(),
 });
 
-const getCollRef = (coll: Collection, uid: string) => {
+const getCollRef = (coll: Collection, uid: string | undefined) => {
   switch (coll) {
     case Collection.INVOICES:
       return collection(db, `organizations/${uid}/invoices`);

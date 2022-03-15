@@ -11,5 +11,6 @@ const app = initializeApp({
   appId: process.env.REACT_APP_APP_ID,
   measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 });
+
 export const auth = getAuth(app);
 export const db = getFirestore(app);

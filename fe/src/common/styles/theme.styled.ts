@@ -7,6 +7,7 @@ const size = {
 const color = {
   primary: '#5e72e4',
   secondary: '#825ee4',
+  error: '#cd2553',
   background: '#1a1d21',
   text: { primary: '#D1D2D3', secondary: '#919193' },
   dark: '#121016',

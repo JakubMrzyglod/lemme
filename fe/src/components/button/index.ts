@@ -4,7 +4,7 @@ import { BtnProps } from './types';
 export const Button = styled.button.attrs<BtnProps>(({ text }) => ({
   children: text,
 }))<BtnProps>`
-  font-size: 0.875rem;
+  font-size: 1rem;
   transition: all 0.15s ease;
   letter-spacing: 0.05em;
   will-change: transform;
@@ -15,7 +15,7 @@ export const Button = styled.button.attrs<BtnProps>(({ text }) => ({
   display: inline-block;
   padding: 0.625rem 1.25rem;
   border: 1px solid transparent;
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
   width: 100%;
   &:hover {
     transform: translateY(-1px);
