@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button } from '../../../../../../../components/button';
+import { Button } from '../../../../../../../../../components/button';
 import { HandleRowButtonProps } from '../../types';
 
 export const HandleRowButton = styled(Button).attrs({
