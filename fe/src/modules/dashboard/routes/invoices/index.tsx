@@ -1,8 +1,6 @@
 import { FC } from 'react';
-import {
-  Collection,
-  useCollection,
-} from '../../../../common/firebase/useCollection';
+import { Collection } from '../../../../common/firebase/constants';
+import { useCollection } from '../../../../common/firebase/useCollection';
 import { Loading } from '../../../../components/loading';
 import { Table } from '../../../../components/table';
 import { INVOICE_TABLE_TITLES } from '../../constants';

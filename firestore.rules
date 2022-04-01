@@ -14,7 +14,7 @@ service cloud.firestore {
     }
 
     match /{document=**} {
-      allow read, write: if false;
+      allow read, write: if true;
     }
 
     // INVOICES --START--
@@ -52,8 +52,9 @@ service cloud.firestore {
   
     match /organizations/{ownerId}/invoices/{invoiceId} {
       allow read: if isOwner(ownerId)
-      allow create: if isOwner(ownerId) && isValidInvoice(getData())
-      allow update: if isOwner(ownerId) && isValidOptionalInvoice(getData())
+      allow create,update: if isOwner(ownerId);
+      // allow create: if isOwner(ownerId) && isValidInvoice(getData())
+      // allow update: if isOwner(ownerId) && isValidOptionalInvoice(getData())
     }
 
     // INVOICES --END--

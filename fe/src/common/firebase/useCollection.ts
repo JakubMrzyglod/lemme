@@ -1,42 +1,29 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
-  collection,
   onSnapshot,
   QueryDocumentSnapshot,
+  QuerySnapshot,
 } from 'firebase/firestore';
-import { db } from '.';
-import { useUserContext } from '../user';
+import { Collection } from './constants';
+import { useDbRef } from './useCollPath';
 
 type Doc = { id: string };
 
 export const useCollection = <T extends Doc = Doc>(coll: Collection) => {
-  const { uid } = useUserContext();
   const [data, setData] = useState<T[]>();
-  const collRef = useMemo(() => getCollRef(coll, uid), [coll, uid]);
+  const { collRef } = useDbRef(coll);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collRef, (snapshot) => {
-      const res = snapshot.docs.map(getData);
-      setData(res as T[]);
-    });
-    return unsubscribe;
+    return onSnapshot(collRef, (snapshot) => setData(getCollData<T>(snapshot)));
   }, [collRef]);
 
   return { collRef, data };
 };
 
-const getData = (doc: QueryDocumentSnapshot) => ({
+const getCollData = <T extends Doc = Doc>(snapshot: QuerySnapshot) =>
+  snapshot.docs.map(getItemData) as T[];
+
+const getItemData = (doc: QueryDocumentSnapshot) => ({
   id: doc.id,
   ...doc.data(),
 });
-
-const getCollRef = (coll: Collection, uid: string | undefined) => {
-  switch (coll) {
-    case Collection.INVOICES:
-      return collection(db, `organizations/${uid}/invoices`);
-  }
-};
-
-export enum Collection {
-  INVOICES,
-}
