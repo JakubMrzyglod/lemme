@@ -1,8 +1,62 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if false;
+    function isOwner(ownerId) {
+      return request.auth.uid == ownerId
     }
+
+    function getData() {
+      return request.resource.data 
+    }
+  
+    function isOptionalDate (date) {
+      return !date || date is timestamp;
+    }
+
+    match /{document=**} {
+      allow read, write: if true;
+    }
+
+    // INVOICES --START--
+
+
+    function addInvoiceFields() {
+      return ['num', 'createPlace', 'items', 'client']
+    }
+
+    function isValidInvoice(docData) {
+      return docData.keys().hasOnly(addInvoiceFields())
+      && docData.num is string
+      && docData.createPlace is string
+      && docData.items is list
+      && docData.client is map
+      && docData.client.name is string
+      && docData.client.taxNumber is string
+      && docData.client.address is string
+      && docData.client.city is string
+      && docData.client.postCode is string
+    }
+
+    function isValidOptionalInvoice(docData) {
+      return docData.keys().hasOnly(addInvoiceFields())
+      && docData.get('num', '') is string
+      && docData.get('createPlace', '') is string
+      && docData.get('items', []) is list
+      && docData.get('client', {}) is map
+      && docData.get('client', {}).get('taxNumber', '') is string
+      && docData.get('client', {}).get('name', '') is string
+      && docData.get('client', {}).get('address', '') is string
+      && docData.get('client', {}).get('city', '') is string
+      && docData.get('client', {}).get('postCode', '') is string
+    }
+  
+    match /organizations/{ownerId}/invoices/{invoiceId} {
+      allow read: if isOwner(ownerId)
+      allow create,update: if isOwner(ownerId);
+      // allow create: if isOwner(ownerId) && isValidInvoice(getData())
+      // allow update: if isOwner(ownerId) && isValidOptionalInvoice(getData())
+    }
+
+    // INVOICES --END--
   }
 }

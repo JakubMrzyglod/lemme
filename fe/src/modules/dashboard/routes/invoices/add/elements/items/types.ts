@@ -5,7 +5,6 @@ export type HandleRowProps = {
 
 export type SummaryProps = {
   watchFieldNames: string[];
-  baseName: string;
   index: number;
   label: string;
 };

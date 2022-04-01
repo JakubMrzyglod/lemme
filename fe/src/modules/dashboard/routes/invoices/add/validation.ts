@@ -1,5 +1,5 @@
 import { object, array, string, number } from 'yup';
-import { BASE_NAME } from './constants';
+import { BASE_NAME } from './elements/items/constants';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 const isNumber = number()
@@ -11,6 +11,13 @@ const isString = string().required('Is Required');
 const schema = object({
   createPlace: isString,
   num: isString,
+  client: object({
+    taxNumber: isString,
+    name: isString,
+    address: isString,
+    postCode: isString,
+    city: isString,
+  }),
   [BASE_NAME]: array().of(
     object({
       name: isString,
